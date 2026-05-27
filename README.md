@@ -18,7 +18,7 @@ Standard Thai in both directions — with multi-reference scoring, error
 typology, and human ratings.
 
 Internally, the codebase uses Northern Thai cultural objects as codenames
-for its components — banners (*Tung*), serving bowls (*Hai Khao*),
+for its components — Stove (*Ang Lo*), serving tray (*Khan Tok*),
 cosmology charts (*Trai Phum*), and so on. The codenames are both a
 stylistic choice and a small way of carrying the culture into the
 engineering layer of the project.
