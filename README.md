@@ -65,16 +65,24 @@ All scores are `chrf_avg`; lower `chrf_diff` is better (less prompt fragility).
 
 ### API cost record
 
-Total spend across all inference runs to date (rounded):
+Total spend across all inference runs to date (Typhoon bills separately via opentyphoon.ai and is not included):
 
-| Run / date | Models | Approx. cost |
-|---|---|---|
-| 2026-05-13 baseline | gpt-4o, claude-sonnet-4-5, deepseek-chat (alias) | ~$1.14 |
-| 2026-05-15 v2 comparison | same 3-model set, 3 prompt variants | ~$1.17 |
-| 2026-05-16 refresh | gpt-5.5, claude-sonnet-4-6, deepseek-v4-flash (explicit pin) | ~$4.50 |
-| **4-day total** | | **$6.81** |
+| Date | Model | Requests | Cost |
+|---|---|---|---|
+| 2026-05-13 | gpt-4o-2024-11-20 | 397 | $0.2902 |
+| 2026-05-13 | claude-sonnet-4-5 | 397 | $0.8400 |
+| 2026-05-13 | deepseek-v4-flash *(alias)* | 397 | $0.0105 |
+| 2026-05-15 | gpt-4o-2024-11-20 | 397 | $0.3076 |
+| 2026-05-15 | gpt-5.5-2026-04-23 *(smoke)* | 2 | ~$0.00 |
+| 2026-05-15 | claude-sonnet-4-5 | 397 | $0.8500 |
+| 2026-05-15 | claude-sonnet-4-6 *(smoke)* | 1 | ~$0.00 |
+| 2026-05-15 | deepseek-v4-flash *(alias)* | 396 | $0.0107 |
+| 2026-05-16 | gpt-5.5-2026-04-23 | 401 | $3.5666 |
+| 2026-05-16 | claude-sonnet-4-6 | 397 | $0.8600 |
+| 2026-05-16 | deepseek-v4-flash *(explicit pin)* | 398 | $0.0743 |
+| **4-day total** | | | **$6.8100** |
 
-**Note on model provenance:** the 05-13/15 DeepSeek runs used the floating `deepseek-chat` alias. The 05-16 refresh switched to the explicit `deepseek-v4-flash` pin — which produced 26× more output tokens per request (~642 tok/req vs ~24), likely explaining the −2.07 chrf_avg regression documented in the diagnostic findings. Typhoon (opentyphoon.ai) bills separately and is not reflected here.
+**Note on model provenance:** the 05-13/15 DeepSeek runs used the floating `deepseek-chat` alias. The 05-16 refresh switched to the explicit `deepseek-v4-flash` pin — which produced 26× more output tokens per request (~642 tok/req vs ~24), likely explaining the −2.07 chrf_avg regression in the diagnostic findings.
 
 An unexpected cost finding from the refresh: GPT-5.5 produced ~20× throughput collapse under an English-imperative prompt (`p2`) vs a Thai-imperative prompt (`p1`) — same source text, same dataset. Hidden reasoning-token spend averaged ~263 tok/req for GPT-5.5 (vs ~26 tok/req for GPT-4o), yielding an 11.7× cost lift per request. Cost prediction for reasoning-class models must factor in the prompt template's reasoning-trigger profile, not just row count.
 
