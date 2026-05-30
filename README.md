@@ -69,22 +69,14 @@ Total spend across all inference runs to date (rounded):
 
 | Run / date | Models | Approx. cost |
 |---|---|---|
-| 2026-05-13 baseline | gpt-4o, claude-sonnet-4-5, deepseek-chat, typhoon-v2.5 | ~$1.20 |
-| 2026-05-15 v2 comparison | same 4-model set, 3 prompt variants | ~$1.40 |
-| 2026-05-16 refresh | gpt-5, claude-sonnet-4-6, claude-opus-4-7, gemini-2.5-pro, deepseek-v4-flash | ~$1.50 (est.) |
+| 2026-05-13 baseline | gpt-4o, claude-sonnet-4-5, deepseek-chat (alias) | ~$1.14 |
+| 2026-05-15 v2 comparison | same 3-model set, 3 prompt variants | ~$1.17 |
+| 2026-05-16 refresh | gpt-5.5, claude-sonnet-4-6, deepseek-v4-flash (explicit pin) | ~$4.50 |
+| **4-day total** | | **$6.81** |
 
-**Note on model provenance:** the registry entry `deepseek-v3` used a
-floating alias (`deepseek-chat`). New runs use an explicit
-pinned model ID (`deepseek-v4-flash`).
+**Note on model provenance:** the 05-13/15 DeepSeek runs used the floating `deepseek-chat` alias. The 05-16 refresh switched to the explicit `deepseek-v4-flash` pin — which produced 26× more output tokens per request (~642 tok/req vs ~24), likely explaining the −2.07 chrf_avg regression documented in the diagnostic findings. Typhoon (opentyphoon.ai) bills separately and is not reflected here.
 
-An unexpected cost finding from the refresh: GPT-5 (`gpt-5.5` internally)
-produced ~20× throughput collapse under an English-imperative prompt
-(`p2`) vs a Thai-imperative prompt (`p1`) — same source text, same dataset.
-Hidden reasoning-token spend averaged ~266 tok/req for GPT-5 on p2 vs ~25
-tok/req for GPT-4o on the same task, yielding a 9× cost lift per request.
-This is documented as a methodology note: cost prediction for
-reasoning-class models must factor in the prompt template's
-reasoning-trigger profile, not just row count.
+An unexpected cost finding from the refresh: GPT-5.5 produced ~20× throughput collapse under an English-imperative prompt (`p2`) vs a Thai-imperative prompt (`p1`) — same source text, same dataset. Hidden reasoning-token spend averaged ~263 tok/req for GPT-5.5 (vs ~26 tok/req for GPT-4o), yielding an 11.7× cost lift per request. Cost prediction for reasoning-class models must factor in the prompt template's reasoning-trigger profile, not just row count.
 
 ---
 
