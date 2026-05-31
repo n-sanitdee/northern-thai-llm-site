@@ -44,7 +44,7 @@ Measured on a held-out slice of naturalistic conversational text
 | Adapter v1 | 2026-05-08 | +13% | Lightweight adaptation on the natural-conversation slice; model begins recognising Northern Thai as Northern Thai |
 | Adapter v2 | 2026-05-18 | +20% | Retrained on refined dataset with tuned recipe; recovers earlier failure cases (repetition loops, dropped dialect particles) |
 
-The +20% figure is relative ChrF improvement over the base model on the same held-out set.
+The +20% figure is relative ChrF improvement over the base model.
 
 ---
 
