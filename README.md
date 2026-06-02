@@ -1,6 +1,6 @@
 # LannaBench
 
-Public companion site for **northern-thai-llm** — a research project evaluating
+Public companion site for **LannaBench** — a research project evaluating
 large language models on the Northern Thai (Lanna, ISO `nort2740`) ↔ Standard
 Thai (`thai1261`) translation task.
 The main codebase is kept private while the project is in progress. This
