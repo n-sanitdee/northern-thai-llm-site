@@ -1,4 +1,4 @@
-# northern-thai-llm-site
+# LannaBench
 
 Public companion site for **northern-thai-llm** — a research project evaluating
 large language models on the Northern Thai (Lanna, ISO `nort2740`) ↔ Standard
