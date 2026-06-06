@@ -1,4 +1,4 @@
-# LannaBench 🏔️
+# LannaBench
 
 <div align="center">
 
@@ -39,7 +39,7 @@ Measured on a held-out slice of naturalistic conversational text:
 |------------|----------|:--------------:|-------------------------------------------------------------------------------------|
 |Base model  |—         |0%              |Off-the-shelf Thai LLM; handles STD well, struggles with NTD vocabulary and particles|
 |🔸 Adapter v1|2026-05-08|**+13%**        |Lightweight adaptation; model begins recognising NTD as NTD                          |
-|🔹 Adapter v2|2026-05-18|**+20%**        |Retrained on refined dataset; recovers repetition loops and dropped dialect particles|
+|🔹 [Adapter v2](https://huggingface.co/aminomewza/typhoon2-lora-v2)|2026-05-18|**+20%**        |Retrained on refined dataset; recovers repetition loops and dropped dialect particles|
 
 
 > The +20% figure is **relative ChrF improvement** over the base model.
@@ -97,14 +97,4 @@ The form is a self-contained HTML instrument that submits via Google Apps Script
 
 -----
 
-## 🚦 Project Status
-
-|Component                                                   |Status               |
-|------------------------------------------------------------|:-------------------:|
-|Benchmark design & data pipeline                            |✅ Complete           |
-|LoRA adapter v2                                             |✅ [Released](https://huggingface.co/aminomewza/typhoon2-lora-v2)           |
-|Multimodel API benchmarking (v1 prompt)                     |✅ Complete           |
-|Multimodel API benchmarking (v2 prompt)                     |✅ Complete           |
-|BaiLan annotation tool (T1)                                 |✅ Complete           |
-
-> The full code repository will be opened once the project is ready to publish.
+The full code repository will be opened once the project is ready to publish.
