@@ -19,13 +19,9 @@
 
 This repository is the **public companion site** for **LannaBench** — a research benchmark evaluating how well frontier and open-weight LLMs handle translation between Northern Thai and Standard Thai in both directions.
 
-The main codebase is private while the project is in progress. This repo hosts public-facing reference pages, benchmark results, and documentation.
-
 ### Why Northern Thai?
 
-Northern Thai (*kam mueang* / ᨣᩴᩤᨾᩮᩬᩥᨦ, ISO `nort2740`) is spoken across eight provinces of Northern Thailand by millions of speakers. Despite this, it is **severely under-represented in modern NLP benchmarks** — most Thai-language models treat it as noise or Standard Thai (`thai1261`) with unusual orthography.
-
-LannaBench is a small step toward changing that.
+Northern Thai (*kam mueang* / ᨣᩴᩤᨾᩮᩬᩥᨦ, ISO `nort2740`) is spoken across eight provinces of Northern Thailand by millions of speakers. Despite this, it is **severely under-represented in modern NLP benchmarks**.
 
 -----
 
