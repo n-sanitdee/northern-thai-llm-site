@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LannaBench — README</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════
+   Tokens — lanna-progress palette, extended
+═══════════════════════════════════════════════ */
+:root {
+  --ink:        #15171a;
+  --ink-soft:   #3d4148;
+  --ink-soft2:  #6b6f76;
+  --ink-soft3:  #9aa0a8;
+  --paper:      #fafaf7;
+  --paper-2:    #f3f3ee;
+  --paper-3:    #ebebe4;
+  --line:       #e6e4dc;
+  --line-2:     #d4d1c6;
+  --green:      #1f6b3a;
+  --green-deep: #143f24;
+  --green-soft: #e8f1ea;
+  --gold:       #b88420;
+  --gold-deep:  #7a560a;
+  --gold-soft:  #fdf5e4;
+  --track:      rgba(20,22,26,.06);
+  --warn:       #b92222;
+  --warn-soft:  #fdecea;
+  --blue:       #1455a4;
+  --blue-soft:  #e3edf9;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+:target { scroll-margin-top: 3.5rem; }
+
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Sidebar layout ─────────────────────────────────── */
+@media (min-width: 1100px) {
+  .sidebar-wrap { position: fixed; left: 0; top: 0; bottom: 0; width: 216px; z-index: 20; }
+  .content-wrap { margin-left: 216px; }
+}
+@media (max-width: 1099px) { .sidebar-wrap { display: none; } }
+
+.sidebar {
+  height: 100%; overflow-y: auto;
+  background: var(--paper-2);
+  border-right: 1px solid var(--line);
+  padding: 1.8rem 1.1rem 2rem;
+}
+.sb-brand    { font-weight: 700; font-size: .9rem; color: var(--ink); letter-spacing: -.01em; }
+.sb-brand em { font-style: normal; color: var(--green); }
+.sb-sub {
+  font-family: "JetBrains Mono", monospace;
+  font-size: .62rem; color: var(--ink-soft3); letter-spacing: .06em;
+  margin-top: .2rem; margin-bottom: 1.2rem;
+  padding-bottom: 1rem; border-bottom: 1px solid var(--line);
+}
+.sb-group {
+  font-size: .62rem; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--green); margin: 1.3rem 0 .4rem;
+}
+.sidebar ul { list-style: none; }
+.sidebar a {
+  display: block; font-size: .8rem; color: var(--ink-soft);
+  text-decoration: none; padding: .28rem .5rem;
+  border-left: 2px solid transparent;
+  border-radius: 0 3px 3px 0;
+  transition: border-color .1s, background .1s, color .1s;
+}
+.sidebar a:hover { color: var(--ink); border-left-color: var(--green); background: var(--green-soft); }
+
+/* ── Top bar ────────────────────────────────────────── */
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  height: 48px; padding: 0 2.5rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: .78rem; color: var(--ink-soft2);
+}
+.topbar-brand {
+  font-weight: 600; color: var(--ink);
+  display: flex; align-items: center; gap: .55rem;
+}
+.topbar-brand::before {
+  content: ''; width: 8px; height: 8px;
+  border-radius: 50%; background: var(--green);
+  display: inline-block;
+}
+.topbar-stamp { font-family: "JetBrains Mono", monospace; font-size: .7rem; letter-spacing: .04em; }
+
+/* ── Page content ───────────────────────────────────── */
+.page { max-width: 848px; margin: 0 auto; padding: 0 2.5rem 5rem; }
+
+/* ── Hero ───────────────────────────────────────────── */
+.hero {
+  display: grid; grid-template-columns: 7fr 5fr; gap: 3.5rem;
+  padding: 3rem 0 3rem; border-bottom: 1px solid var(--line); margin-bottom: 3.2rem;
+  align-items: center;
+}
+@media (max-width: 680px) { .hero { grid-template-columns: 1fr; gap: 2rem; } }
+
+.hero-eyebrow {
+  font-size: .68rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase;
+  color: var(--green); margin-bottom: .75rem;
+  display: flex; align-items: center; gap: .45rem;
+}
+.hero-eyebrow::before { content: ''; width: 18px; height: 1.5px; background: var(--green); }
+
+.hero-title {
+  font-family: "Charter", "Iowan Old Style", Georgia, serif;
+  font-size: 3.4rem; font-weight: 700; line-height: .95;
+  letter-spacing: -.035em; color: var(--ink); margin-bottom: .85rem;
+}
+.hero-title em { font-style: normal; color: var(--green-deep); }
+
+.hero-desc {
+  font-size: .9rem; color: var(--ink-soft); line-height: 1.65; max-width: 42ch;
+  margin-bottom: 1.4rem;
+}
+.hero-badges { display: flex; flex-wrap: wrap; gap: .45rem; }
+.badge {
+  font-family: "JetBrains Mono", monospace; font-size: .6rem; font-weight: 600;
+  letter-spacing: .07em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px;
+}
+.badge-green { background: var(--green-soft); color: var(--green-deep); }
+.badge-gold  { background: #fdf0d8; color: var(--gold-deep); }
+.badge-gray  { background: var(--paper-3); color: var(--ink-soft2); }
+.badge-blue  { background: var(--blue-soft); color: var(--blue); }
+
+/* Stat tiles in hero */
+.stat-stack { display: flex; flex-direction: column; gap: .8rem; }
+.stat-tile {
+  padding: .9rem 1.1rem;
+  background: var(--paper); border: 1px solid var(--line);
+  border-left: 3px solid var(--green); border-radius: 0 5px 5px 0;
+}
+.stat-tile.gold  { border-left-color: var(--gold); }
+.stat-tile.gray  { border-left-color: var(--ink-soft3); }
+.stat-tile.blue  { border-left-color: var(--blue); }
+.stat-label {
+  font-size: .63rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
+  color: var(--ink-soft2); margin-bottom: .2rem;
+}
+.stat-val {
+  font-family: "Charter", "Iowan Old Style", Georgia, serif;
+  font-size: 1.9rem; font-weight: 700; line-height: 1;
+  color: var(--green-deep); letter-spacing: -.025em;
+}
+.stat-tile.gold  .stat-val { color: var(--gold-deep); }
+.stat-tile.gray  .stat-val { color: var(--ink-soft2); }
+.stat-tile.blue  .stat-val { color: var(--blue); }
+.stat-sub { font-size: .73rem; color: var(--ink-soft2); margin-top: .25rem; line-height: 1.4; }
+
+/* ── Section chrome ─────────────────────────────────── */
+section { margin-bottom: 3rem; }
+
+.sec-eyebrow {
+  font-size: .66rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--green); margin-bottom: .45rem;
+  display: flex; align-items: center; gap: .4rem;
+}
+.sec-eyebrow::before { content: ''; width: 14px; height: 1.5px; background: var(--green); }
+
+.sec-title {
+  font-family: "Charter", "Iowan Old Style", Georgia, serif;
+  font-size: 1.55rem; font-weight: 700; color: var(--ink);
+  letter-spacing: -.01em; margin-bottom: .25rem;
+}
+.sec-sub { font-size: .83rem; color: var(--ink-soft2); margin-bottom: 1.4rem; }
+
+p.body  {
+  font-size: .9rem; color: var(--ink-soft); line-height: 1.7;
+  margin-bottom: .9rem; max-width: 72ch;
+}
+p.body strong { color: var(--ink); }
+p.body a { color: var(--green); text-decoration: none; font-weight: 600; }
+p.body a:hover { color: var(--green-deep); }
+
+code {
+  font-family: "JetBrains Mono", monospace; font-size: .82em;
+  background: var(--paper-3); border-radius: 3px; padding: .1em .35em; color: var(--ink);
+}
+
+/* ── Progress bars ─────────────────────────────────── */
+.prog-rows { margin-top: .3rem; }
+.prog-row { padding: 1rem 0; border-top: 1px solid var(--line); }
+.prog-row:first-child { border-top: 1.5px solid var(--line-2); }
+.prog-row:last-child  { border-bottom: 1.5px solid var(--line-2); }
+
+.prog-head {
+  display: flex; align-items: baseline; gap: .5rem; margin-bottom: .5rem;
+}
+.prog-name  { font-size: .91rem; font-weight: 600; color: var(--ink); }
+.prog-sep   { color: var(--ink-soft3); }
+.prog-date  { font-family: "JetBrains Mono", monospace; font-size: .7rem; color: var(--ink-soft2); letter-spacing: .04em; }
+.prog-tag   {
+  margin-left: auto; font-family: "JetBrains Mono", monospace;
+  font-size: .6rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--green); background: var(--green-soft); padding: 2px 7px; border-radius: 3px;
+}
+.prog-bar   { display: flex; align-items: center; gap: .9rem; margin-bottom: .5rem; }
+.prog-track { flex: 1; height: 8px; background: var(--track); border-radius: 4px; overflow: hidden; }
+.prog-fill  { height: 100%; border-radius: 4px; }
+.prog-val   { font-family: "JetBrains Mono", monospace; font-size: .82rem; font-weight: 600; min-width: 48px; text-align: right; }
+.prog-note  { font-size: .83rem; color: var(--ink-soft); line-height: 1.5; max-width: 68ch; }
+.prog-note a { color: var(--green); text-decoration: none; font-weight: 600; }
+
+.prog-row.base .prog-fill { width: 2%;   background: var(--ink-soft3); }
+.prog-row.base .prog-val  { color: var(--ink-soft2); }
+.prog-row.v1   .prog-fill { width: 65%;  background: var(--gold); }
+.prog-row.v1   .prog-val  { color: var(--gold-deep); }
+.prog-row.v2   .prog-fill { width: 100%; background: var(--green); }
+.prog-row.v2   .prog-val  { color: var(--green-deep); font-weight: 700; }
+
+/* ── Tables ─────────────────────────────────────────── */
+.table-scroll { overflow-x: auto; margin: .8rem 0 1rem; border-radius: 5px; border: 1px solid var(--line); }
+table { width: 100%; border-collapse: collapse; font-size: .84rem; }
+
+thead th {
+  font-size: .63rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
+  color: var(--ink-soft2); padding: .55rem .8rem;
+  border-bottom: 1.5px solid var(--line-2); text-align: left; white-space: nowrap;
+  background: var(--paper-2);
+}
+thead th.r { text-align: right; }
+tbody td {
+  padding: .5rem .8rem; border-bottom: 1px solid var(--line);
+  color: var(--ink-soft); vertical-align: middle;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: var(--paper-2); }
+td.mono { font-family: "JetBrains Mono", monospace; font-size: .77rem; }
+td.num  { text-align: right; font-family: "JetBrains Mono", monospace; font-size: .77rem; font-variant-numeric: tabular-nums; }
+td.bold { font-weight: 600; color: var(--ink); }
+td.hi   { color: var(--warn); font-weight: 600; }
+td.lo   { color: var(--green); font-weight: 600; }
+td.muted { color: var(--ink-soft3); }
+td.leader { color: var(--gold-deep); font-weight: 700; }
+
+.row-divider td { border-top: 2px solid var(--line-2) !important; }
+.row-total td {
+  background: var(--paper-2) !important; border-top: 1.5px solid var(--line-2);
+  font-weight: 600; color: var(--ink);
+}
+
+/* Provider label pills */
+.prov {
+  display: inline-block; font-family: "JetBrains Mono", monospace;
+  font-size: .58rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+  padding: 1px 5px; border-radius: 2px; vertical-align: middle; margin-right: .3rem;
+}
+.prov-openai    { background: var(--blue-soft);  color: var(--blue); }
+.prov-anthropic { background: #fdf0d8; color: var(--gold-deep); }
+.prov-deepseek  { background: var(--green-soft); color: var(--green-deep); }
+
+/* ── Cost summary tiles ─────────────────────────────── */
+.cost-tiles {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(168px, 1fr));
+  gap: .75rem; margin-bottom: 1.6rem;
+}
+
+/* ── Callouts ───────────────────────────────────────── */
+.callout {
+  border-left: 3px solid var(--gold); background: var(--gold-soft);
+  padding: .85rem 1.1rem; border-radius: 0 5px 5px 0;
+  margin: .9rem 0; font-size: .87rem; color: var(--ink-soft); line-height: 1.6;
+}
+.callout.warn { border-left-color: var(--warn); background: var(--warn-soft); }
+.callout.good { border-left-color: var(--green); background: var(--green-soft); }
+.callout strong { color: var(--ink); }
+
+/* ── Rule of thumb box ──────────────────────────────── */
+.rule-box {
+  border: 1px solid var(--line-2); border-radius: 5px;
+  padding: 1rem 1.2rem; margin: 1.2rem 0;
+  background: var(--paper-2); font-size: .85rem; color: var(--ink-soft); line-height: 1.7;
+}
+.rule-box strong { color: var(--ink); }
+.rule-box .rule-label {
+  font-size: .62rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-soft2); margin-bottom: .5rem; display: block;
+}
+
+/* ── Footer ─────────────────────────────────────────── */
+.page-footer {
+  padding-top: 1.8rem; border-top: 1px solid var(--line);
+  font-size: .74rem; color: var(--ink-soft2);
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: .5rem; margin-top: 1rem;
+}
+.page-footer strong { color: var(--ink); }
+.page-footer a { color: var(--green); text-decoration: none; font-weight: 500; }
+.page-footer .mono-sm { font-family: "JetBrains Mono", monospace; font-size: .66rem; letter-spacing: .04em; }
+</style>
+</head>
+<body>
+
+<!-- ════ SIDEBAR ════════════════════════════════════════ -->
+<div class="sidebar-wrap">
+  <nav class="sidebar" aria-label="Page navigation">
+    <div class="sb-brand">Lanna<em>Bench</em></div>
+    <div class="sb-sub">nort2740 · ISO 639-3 · nod</div>
+
+    <div class="sb-group">Contents</div>
+    <ul>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#lora">LoRA Adapters</a></li>
+      <li><a href="#benchmark">Multimodel Benchmark</a></li>
+      <li><a href="#cost">API Cost Record</a></li>
+      <li><a href="#codenames">Codenames</a></li>
+      <li><a href="#bailan">BaiLan Evaluation</a></li>
+    </ul>
+
+    <div class="sb-group" style="margin-top: 1.8rem;">Related</div>
+    <ul>
+      <li><a href="lanna-codenames-v2.html">Codenames (v2)</a></li>
+      <li><a href="lanna-progress.html">Progress snapshot</a></li>
+      <li><a href="api_cost_record_2026-05-16.html">Full cost report</a></li>
+    </ul>
+  </nav>
+</div>
+
+<!-- ════ MAIN ═══════════════════════════════════════════ -->
+<div class="content-wrap">
+
+  <div class="topbar">
+    <div class="topbar-brand">LannaBench · Public README</div>
+    <span class="topbar-stamp">Measured 2026-05-18 · Northern Thai NLP</span>
+  </div>
+
+  <div class="page">
+
+    <!-- ── HERO ─────────────────────────────────────────── -->
+    <div class="hero">
+      <div>
+        <div class="hero-eyebrow">Research Benchmark</div>
+        <h1 class="hero-title">Lanna<br><em>Bench</em></h1>
+        <p class="hero-desc">
+          Evaluating large language models on Northern Thai ↔ Standard Thai translation — with multi-reference scoring, error typology, and human ratings.
+        </p>
+        <div class="hero-badges">
+          <span class="badge badge-gray">MIT License</span>
+          <span class="badge badge-gold">In Progress</span>
+          <span class="badge badge-green">NTD ↔ STD</span>
+          <span class="badge badge-green">LoRA v2 · +20% ChrF</span>
+          <span class="badge badge-blue">9 Models</span>
+        </div>
+      </div>
+      <div class="stat-stack">
+        <div class="stat-tile">
+          <div class="stat-label">Best adapter · Δ ChrF</div>
+          <div class="stat-val">+20%</div>
+          <div class="stat-sub">over off-the-shelf base · 2026-05-18</div>
+        </div>
+        <div class="stat-tile gold">
+          <div class="stat-label">Best benchmark score</div>
+          <div class="stat-val">72.39</div>
+          <div class="stat-sub">DeepSeek v4-flash · chrf_avg · v2 prompts</div>
+        </div>
+        <div class="stat-tile gray">
+          <div class="stat-label">4-day API campaign</div>
+          <div class="stat-val">$6.81</div>
+          <div class="stat-sub">3 providers · ~3,990 API calls</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── OVERVIEW ──────────────────────────────────────── -->
+    <section id="overview">
+      <div class="sec-eyebrow">Background</div>
+      <h2 class="sec-title">Overview</h2>
+      <p class="sec-sub">Why Northern Thai — and why now?</p>
+
+      <p class="body">
+        This page is the public companion site for <strong>LannaBench</strong> — a research benchmark evaluating how well frontier and open-weight LLMs handle translation between Northern Thai and Standard Thai in both directions. It pairs automated scoring (a multi-reference Triple-ChrF metric) with human ratings.
+      </p>
+      <p class="body">
+        Northern Thai (Lanna / ᨣᩴᩤᨾᩮᩬᩥᨦ, ISO <code>nort2740</code>) is spoken across eight provinces of Northern Thailand by millions of speakers. Despite this, it is severely under-represented in modern NLP benchmarks — the models that handle Standard Thai with ease routinely stumble on Northern Thai vocabulary, particles, and tonal patterns.
+      </p>
+      <p class="body">
+        The study uses a 3-prompt robustness protocol on a held-out slice of naturalistic conversational text, evaluating 9 models including Typhoon2, SeaLLM, LLaMA-3.1-8B, Qwen2.5, and a three-provider API cohort (OpenAI / Anthropic / DeepSeek). LoRA fine-tuning is scoped to Typhoon2 using QLoRA NF4 4-bit via a custom <em>Anglo</em> finetuner.
+      </p>
+    </section>
+
+    <!-- ── LORA ADAPTERS ─────────────────────────────────── -->
+    <section id="lora">
+      <div class="sec-eyebrow">Adapter Iterations</div>
+      <h2 class="sec-title">LoRA Adapter Improvements</h2>
+      <p class="sec-sub">NTD → STD · held-out conversational text · Δ ChrF over base model</p>
+
+      <div class="prog-rows">
+        <div class="prog-row base">
+          <div class="prog-head">
+            <span class="prog-name">Base model</span>
+            <span class="prog-sep">·</span>
+            <span class="prog-date">off-the-shelf</span>
+          </div>
+          <div class="prog-bar">
+            <div class="prog-track"><div class="prog-fill"></div></div>
+            <div class="prog-val">0%</div>
+          </div>
+          <div class="prog-note">A capable general-purpose Thai LLM, used as-is. Handles Standard Thai well; stumbles on Northern Thai vocabulary, particles, and tone.</div>
+        </div>
+
+        <div class="prog-row v1">
+          <div class="prog-head">
+            <span class="prog-name">Adapter v1</span>
+            <span class="prog-sep">·</span>
+            <span class="prog-date">2026-05-08</span>
+          </div>
+          <div class="prog-bar">
+            <div class="prog-track"><div class="prog-fill"></div></div>
+            <div class="prog-val">+13%</div>
+          </div>
+          <div class="prog-note">Lightweight adaptation on the natural-conversation slice of the corpus — the model begins to hear Northern Thai as Northern Thai.</div>
+        </div>
+
+        <div class="prog-row v2">
+          <div class="prog-head">
+            <span class="prog-name">Adapter v2</span>
+            <span class="prog-sep">·</span>
+            <span class="prog-date">2026-05-18</span>
+            <span class="prog-tag">Current</span>
+          </div>
+          <div class="prog-bar">
+            <div class="prog-track"><div class="prog-fill"></div></div>
+            <div class="prog-val">+20%</div>
+          </div>
+          <div class="prog-note">Retrained on a refined dataset with a tuned recipe — recovers earlier failure cases like repetition loops and dropped dialect particles. Available on HuggingFace at <a href="https://huggingface.co/aminomewza/typhoon2-lora-v2">aminomewza/typhoon2-lora-v2</a>.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── MULTIMODEL BENCHMARK ─────────────────────────── -->
+    <section id="benchmark">
+      <div class="sec-eyebrow">Benchmark</div>
+      <h2 class="sec-title">Multimodel Benchmark — API Cohort</h2>
+      <p class="sec-sub">v1 → v2 prompt template comparison · all scores are <code>chrf_avg</code> · v2 redesigned with clearer NTD boundary marking and more specific imperative instruction</p>
+
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Model</th>
+              <th class="r">v1</th>
+              <th class="r">v2</th>
+              <th class="r">Δ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="bold">gpt-4o</td>
+              <td class="num">70.94</td>
+              <td class="num">70.18</td>
+              <td class="num hi">−0.75</td>
+            </tr>
+            <tr>
+              <td class="bold">claude-sonnet</td>
+              <td class="num">67.34</td>
+              <td class="num">68.22</td>
+              <td class="num lo">+0.88</td>
+            </tr>
+            <tr>
+              <td class="bold">deepseek (v4-flash, alias)</td>
+              <td class="num">68.94</td>
+              <td class="num leader">72.39</td>
+              <td class="num leader">⭐ +3.45 ← leader</td>
+            </tr>
+            <tr>
+              <td class="bold">typhoon-s-thaillm</td>
+              <td class="num">47.34</td>
+              <td class="num">51.34</td>
+              <td class="num lo">+4.01</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <!-- ── API COST RECORD ───────────────────────────────── -->
+    <section id="cost">
+      <div class="sec-eyebrow">Cost Analysis</div>
+      <h2 class="sec-title">API Cost Record</h2>
+      <p class="sec-sub">2026-05-13 → 2026-05-16 · 3 providers · 7 inference runs · ~3,990 API calls total</p>
+
+      <!-- Summary tiles -->
+      <div class="cost-tiles">
+        <div class="stat-tile gray" style="border-radius: 5px;">
+          <div class="stat-label">Grand total</div>
+          <div class="stat-val" style="font-size: 1.7rem; color: var(--ink);">$6.81</div>
+          <div class="stat-sub">4 days</div>
+        </div>
+        <div class="stat-tile blue" style="border-radius: 5px;">
+          <div class="stat-label">OpenAI</div>
+          <div class="stat-val" style="font-size: 1.7rem;">$4.16</div>
+          <div class="stat-sub">61% · gpt-4o + gpt-5.5 spike</div>
+        </div>
+        <div class="stat-tile gold" style="border-radius: 5px;">
+          <div class="stat-label">Anthropic</div>
+          <div class="stat-val" style="font-size: 1.7rem;">$2.55</div>
+          <div class="stat-sub">37% · Sonnet 4.5/4.6 · ~$0.85/run flat</div>
+        </div>
+        <div class="stat-tile" style="border-radius: 5px;">
+          <div class="stat-label">DeepSeek</div>
+          <div class="stat-val" style="font-size: 1.7rem;">$0.10</div>
+          <div class="stat-sub">1.4% · alias + explicit pin</div>
+        </div>
+      </div>
+
+      <!-- Full breakdown table -->
+      <p style="font-size: .72rem; font-weight: 700; color: var(--ink-soft2); letter-spacing: .09em; text-transform: uppercase; margin-bottom: .6rem;">Per-day, per-model breakdown</p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Provider</th>
+              <th>Model</th>
+              <th class="r">Req</th>
+              <th class="r">In tok</th>
+              <th class="r">Out tok</th>
+              <th class="r">Cost</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- ─ 05-13 ─ -->
+            <tr>
+              <td class="mono muted" style="color: var(--ink-soft);">05-13</td>
+              <td><span class="prov prov-openai">OpenAI</span></td>
+              <td class="mono">gpt-4o-2024-11-20</td>
+              <td class="num">397</td>
+              <td class="num">74,639</td>
+              <td class="num">10,359</td>
+              <td class="num">$0.2902</td>
+            </tr>
+            <tr>
+              <td class="mono muted" style="color: var(--ink-soft);"></td>
+              <td><span class="prov prov-anthropic">Anthropic</span></td>
+              <td class="mono">claude-sonnet-4-5</td>
+              <td class="num">397</td>
+              <td class="num">159,354</td>
+              <td class="num">23,807</td>
+              <td class="num">$0.8400</td>
+            </tr>
+            <tr>
+              <td class="mono muted" style="color: var(--ink-soft);"></td>
+              <td><span class="prov prov-deepseek">DeepSeek</span></td>
+              <td class="mono">deepseek-v4-flash</td>
+              <td class="num">397</td>
+              <td class="num">65,337</td>
+              <td class="num">11,221</td>
+              <td class="num">$0.0105</td>
+            </tr>
+            <!-- ─ 05-15 ─ -->
+            <tr class="row-divider">
+              <td class="mono" style="color: var(--ink-soft);">05-15</td>
+              <td><span class="prov prov-openai">OpenAI</span></td>
+              <td class="mono">gpt-4o-2024-11-20</td>
+              <td class="num">397</td>
+              <td class="num">79,270</td>
+              <td class="num">10,018</td>
+              <td class="num">$0.3076</td>
+            </tr>
+            <tr>
+              <td class="muted mono"></td>
+              <td><span class="prov prov-openai">OpenAI</span></td>
+              <td class="mono muted">gpt-5.5-2026-04-23 <em style="font-size:.78em;">(smoke ×2)</em></td>
+              <td class="num muted">2</td>
+              <td class="num muted">364</td>
+              <td class="num muted">248</td>
+              <td class="num muted">~$0.00</td>
+            </tr>
+            <tr>
+              <td class="muted mono"></td>
+              <td><span class="prov prov-anthropic">Anthropic</span></td>
+              <td class="mono">claude-sonnet-4-5</td>
+              <td class="num">397</td>
+              <td class="num">168,550</td>
+              <td class="num">22,501</td>
+              <td class="num">$0.8500</td>
+            </tr>
+            <tr>
+              <td class="muted mono"></td>
+              <td><span class="prov prov-anthropic">Anthropic</span></td>
+              <td class="mono muted">claude-sonnet-4-6 <em style="font-size:.78em;">(smoke ×1)</em></td>
+              <td class="num muted">1</td>
+              <td class="num muted">396</td>
+              <td class="num muted">10</td>
+              <td class="num muted">~$0.00</td>
+            </tr>
+            <tr>
+              <td class="muted mono"></td>
+              <td><span class="prov prov-deepseek">DeepSeek</span></td>
+              <td class="mono">deepseek-v4-flash</td>
+              <td class="num">396</td>
+              <td class="num">68,482</td>
+              <td class="num">9,423</td>
+              <td class="num">$0.0107</td>
+            </tr>
+            <!-- ─ 05-16 ─ -->
+            <tr class="row-divider">
+              <td class="mono" style="color: var(--ink-soft);">05-16</td>
+              <td><span class="prov prov-openai">OpenAI</span></td>
+              <td class="mono hi">gpt-5.5-2026-04-23 🔺</td>
+              <td class="num">401</td>
+              <td class="num">79,768</td>
+              <td class="num hi">105,593</td>
+              <td class="num hi">$3.5666</td>
+            </tr>
+            <tr>
+              <td class="muted mono"></td>
+              <td><span class="prov prov-anthropic">Anthropic</span></td>
+              <td class="mono">claude-sonnet-4-6</td>
+              <td class="num">397</td>
+              <td class="num">168,946</td>
+              <td class="num">23,115</td>
+              <td class="num">$0.8600</td>
+            </tr>
+            <tr>
+              <td class="muted mono"></td>
+              <td><span class="prov prov-deepseek">DeepSeek</span></td>
+              <td class="mono hi">deepseek-v4-flash (explicit pin) 🔺</td>
+              <td class="num">398</td>
+              <td class="num">68,812</td>
+              <td class="num hi">255,540</td>
+              <td class="num hi">$0.0743</td>
+            </tr>
+            <!-- total -->
+            <tr class="row-total">
+              <td colspan="6" style="text-align: right; font-size: .8rem; color: var(--ink-soft2); padding-right: .8rem;">Grand total</td>
+              <td class="num">$6.8100</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Key findings -->
+      <div class="callout warn">
+        <strong>🔺 GPT-5.5 hidden-reasoning tax (05-16).</strong> Output tokens spiked to 105,593 on gpt-5.5 vs ~10k for gpt-4o on the same task — that's ~263 tok/req vs ~26, an <strong>11.7× cost lift</strong>. The billing API counts reasoning tokens in output. Budget planning using GPT-4o-era estimates underestimates GPT-5 cost by ~10×; pre-budget at ~$0.009 per call for any GPT-5 family member.
+      </div>
+      <div class="callout warn">
+        <strong>🔺 DeepSeek alias vs explicit pin (05-16).</strong> Switching from the floating <code>deepseek-chat</code> alias to the pinned <code>deepseek-v4-flash</code> produced 26× more output tokens (255,540 / 398 = 642 tok/req vs ~24 on alias runs). Same prompt template, same dataset. The alias may have been routing to a terser snapshot, or the explicit pin enables thinking/reasoning by default.
+      </div>
+      <div class="callout good">
+        <strong>DeepSeek cache efficiency jumped 4× under the explicit pin (05-16).</strong> Cache hit rate improved from ~17–20% (alias runs) to <strong>73%</strong> (50,432 cache-hit / 18,380 cache-miss). At a 50× hit/miss price ratio, this partially offsets the output-bloat cost: even at 642 tok/req the per-call cost was $0.000187 — still <strong>47× cheaper</strong> than gpt-4o.
+      </div>
+
+      <div class="rule-box">
+        <span class="rule-label">Cost rule of thumb · per API call</span>
+        GPT-5 flagship <strong>≈ 11× GPT-4o ≈ 4× Sonnet ≈ 50× DeepSeek-flash (explicit pin) ≈ 330× DeepSeek-flash (alias).</strong> Anthropic pricing is the most predictable: all four Sonnet runs (4.5 ×2, 4.6 ×2) landed within $0.84–$0.86 with no reasoning surprise and no caching discount. For floating-alias provider lines, the billing CSV is the ground truth — the alias name does not predict price or output-length behaviour reliably.
+      </div>
+    </section>
+
+    <!-- ── CODENAMES ──────────────────────────────────────── -->
+    <section id="codenames">
+      <div class="sec-eyebrow">Codebase</div>
+      <h2 class="sec-title">Codename Reference</h2>
+      <p class="sec-sub">Northern Thai cultural terms as software identifiers</p>
+
+      <p class="body">
+        Internally, the codebase uses <strong>Northern Thai cultural terms</strong> as codenames for its components. The 28-item system maps one-to-one to software modules. The codenames are both a stylistic choice and a way of carrying the culture into the engineering layer of the project.
+      </p>
+      <p class="body">
+        The monorepo is structured as four uv-workspace Python packages: <code>lanna_khuang</code> (data), <code>lanna_kuafai</code> (adaptation), <code>lanna_jorfa</code> (evaluation), and <code>oob_meta</code> (shared utilities).
+      </p>
+      <p class="body">
+        <strong>→</strong> <a href="lanna-codenames-v2.html" style="color: var(--green); font-weight: 700; text-decoration: none;">Lanna Codenames (v2)</a> — each entry shows the literal object, its cultural role, and how the codename maps to a module or concept in the codebase.
+      </p>
+    </section>
+
+    <!-- ── BAILAN ─────────────────────────────────────────── -->
+    <section id="bailan">
+      <div class="sec-eyebrow">Human Evaluation</div>
+      <h2 class="sec-title">BaiLan — Human Rating Instrument</h2>
+      <p class="sec-sub">Gamified NTD → STD translation evaluation form</p>
+
+      <p class="body">
+        <strong>BaiLan</strong> is the human-rating instrument for LannaBench. Raters evaluate model translations on <strong>six axes</strong> (1–5 Likert scale each) in a card-by-card quiz flow with streak counters, bilingual Thai/English content, and Lanna temple aesthetics (gold/cream/teak palette).
+      </p>
+      <p class="body">
+        The form shows one prompt output per card, split into natural context dependent (NCD) and natural context independent (NCI). It is a self-contained HTML file that submits via Google Apps Script with a JSONL backup download fallback.
+      </p>
+
+      <div class="callout" style="margin-top: .5rem;">
+        The full code repository will be opened once the project is ready to publish.
+      </div>
+    </section>
+
+    <footer class="page-footer">
+      <span>An ongoing benchmark and adaptation study for <strong>Kham Mueang</strong> — Northern Thai, the Lanna Dialect.</span>
+      <span class="mono-sm">nort2740 · ISO 639-3 · nod &nbsp;·&nbsp; <a href="lanna-codenames-v2.html">the codenames</a></span>
+    </footer>
+
+  </div><!-- /.page -->
+</div><!-- /.content-wrap -->
+
+</body>
+</html>
